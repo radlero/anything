@@ -1,0 +1,11 @@
+@layout('layouts/basic')
+
+@section('content')
+    <h1>Login page</h1>
+    <form method="post">
+        {{ csrfField() }}
+        <input type="text" name="username" placeholder="Username" id=""><br>
+        <input type="password" name="password" placeholder="Password" id=""><br>
+        <input type="submit" value="Login">
+    </form>
+@endsection

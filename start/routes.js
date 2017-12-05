@@ -14,6 +14,7 @@
 */
 
 const Route = use('Route')
+const User = use('App/Models/User')
 
 Route
     .get('/', ({ request, response, view }) => {
@@ -26,14 +27,34 @@ Route
         return view.render('login')
     })
     .as('login')
+Route
+    .get('/register', ({request, response, view}) => {
+        return view.render('register')
+    })
+    .as('register')
+Route
+    .post('/register', async ({ request, response }) => {
+        let username = await request.input('username')
+        let email = await request.input('email')
+        let password = await request.input('password')
+        console.log(username,email, password)
+        const user = new User()
+        user.username = username
+        user.email = email
+        user.password = password
+        console.log(await user.save())
 
+        return await response.send("We have received your form submission")
+        
+    }).validator('StoreUser')
+        
 Route
     .post('/login', async ({ request, response }) => {
         let username = await request.input('username')
         let password = await request.input('password')
-
-        // search in the database for username and password
         console.log(username, password)
+        return await response.send("Thank you for logging in")
+      
     })
 
     

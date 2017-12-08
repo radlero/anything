@@ -1,11 +1,17 @@
 @layout('layouts/basic')
 
 @section('content')
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="./form.js"></script>
     <h1>Login page</h1>
-    <form method="post">
+    <p></p>
+    <div class="wrapper">
+    <form class="form" method="post">
         {{ csrfField() }}
-        <input type="text" name="username" placeholder="Username" id=""><br>
+        <input type="text" name="email" placeholder="Email Address" id=""><br>
         <input type="password" name="password" placeholder="Password" id=""><br>
         <input type="submit" value="Login">
     </form>
+    </div>
 @endsection

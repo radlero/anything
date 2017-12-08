@@ -1,0 +1,211 @@
+@layout('layouts/basic')
+@section('content')
+<html>
+<head>
+<style>
+*{
+  padding:0;
+  margin:0;
+  box-sizing: border-box;
+}
+body{
+  font-size: 1.2rem;
+  line-height: 1.6;
+  font-family: sans-serif;
+}
+.container{
+  width: 500px;
+  margin: 1rem auto;
+}
+#addEditForm{
+  margin: 0 1rem;
+  width: 420px;
+}
+fieldset{
+  width: 100%;
+}
+legend{
+  padding:0 1rem;
+  margin: 0 2rem;
+  font-size: 1rem;
+}
+.formBox{
+  width: 50%;
+  float: left;
+}
+input{
+  margin: 0.5rem;
+}
+button{
+  margin: 0.5rem;
+  padding: 0 1rem;
+}
+
+.movie{
+  border: 1px solid #9C27B0;
+  width: 200px;
+  height: 8.8rem;
+  margin: 1rem 0 0 1rem;
+  float: left;
+  /** box-shadow: 1px 1px 2px #2B0033; **/
+  cursor: pointer;
+}
+.movie__title{
+  background-color: #9C27B0;
+  color: #FFF;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  height: 3.4rem;
+  padding: 0.5rem 1rem;
+}
+.movie__director{
+  background-color: #FFF;
+  color: #2B0033;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  padding: 0.5rem 1rem 0 1rem;
+}
+.movie__year{
+  background-color: #FFF;
+  color: #41004D;
+  font-size: 0.8rem;
+  line-height: 1rem;
+  padding: 0.5rem 1rem;
+}
+</style>
+<script>
+var data = {"movies":[
+  {"id":1234, "title":"Boondock Saints", "year":1999, "director":"Troy Duffy"},
+ 
+  
+]};
+var container;
+var currentMovie = 0;
+
+document.addEventListener('DOMContentLoaded', init);
+
+function init(){
+  //event listeners for Form
+  document.getElementById("btnClear").addEventListener('click', clearForm);
+  document.getElementById("btnSave").addEventListener('click', saveMovie);
+  container = document.querySelector('.container');
+  //add the cards based on default data
+  addCards();
+}
+
+function addCards(){
+  data.movies.forEach(function(movie){
+    addCard(movie);
+  })
+}
+
+function addCard(movie){
+  //add a single card
+  var div = document.getElementById('template');
+  var newCard = div.cloneNode(true);
+  newCard.removeAttribute('hidden');
+  newCard.setAttribute('data-id', movie.id);
+  newCard.querySelector('.movie__title').textContent = movie.title;
+  newCard.querySelector('.movie__director').textContent = movie.director;
+  newCard.querySelector('.movie__year').textContent = movie.year;
+  container.appendChild(newCard);
+  newCard.addEventListener('click', showCardInForm);
+}
+
+function editCard(movie){
+  var cards = document.querySelectorAll('.movie');
+  var numCards = cards.length;
+  for(var c=0; c<numCards; c++){
+    if(cards[c].getAttribute('data-id') == movie.id){
+      //found the one to update
+      cards[c].querySelector('.movie__title').textContent = movie.title;
+      cards[c].querySelector('.movie__director').textContent = movie.director;
+      cards[c].querySelector('.movie__year').textContent = movie.year;
+      break;
+    }
+  }
+}
+
+function saveMovie(ev){
+  ev.preventDefault();
+  //when user clicks on Save button
+  //Need to decide if this is ADD or EDIT
+  if(document.getElementById('title').value 
+     && document.getElementById('director').value 
+     && document.getElementById('year').value){
+    var movie = {
+      title: document.getElementById('title').value,
+      director: document.getElementById('director').value,
+      year: document.getElementById('year').value
+    }
+    if(currentMovie == 0){
+      //ADD
+      movie.id = Date.now();
+      addCard(movie);
+    }else{
+      //EDIT
+      movie.id = currentMovie;
+      editCard(movie);
+    }
+    //clear form
+    clearForm();
+  }
+}
+
+function showCardInForm(ev){
+  var card = ev.currentTarget;
+  //clicked on a Movie Card. Load the Form
+  while(!card.classList.contains('movie')){
+    card = card.parentElement;
+  }
+  var movie = {
+    id: card.getAttribute('data-id'),
+    title: card.querySelector('.movie__title').textContent,
+    director: card.querySelector('.movie__director').textContent,
+    year: card.querySelector('.movie__year').textContent
+  }
+  currentMovie = movie.id;
+  document.getElementById('title').value = movie.title;
+  document.getElementById('director').value = movie.director;
+  document.getElementById('year').value = movie.year;
+}
+
+function clearForm(ev){
+  if(ev){
+    ev.preventDefault();
+  }
+  document.getElementById('addEditForm').reset();
+  currentMovie = 0;
+}
+</script>
+</head>
+ 
+      
+ <div class="container">
+  <form id="addEditForm">
+    <fieldset>
+      <legend>Add - Edit Offer</legend>
+      <div class="formBox">
+        <input type="text" id="title" placeholder="Movie Title" />
+      </div>
+      <div class="formBox">
+        <input type="text" id="director" placeholder="Movie Director" />
+      </div>
+      <div class="formBox">
+        <input type="text" id="year" placeholder="Release Year" />
+      </div>
+      <div class="formBox">
+        <button id="btnClear">Clear</button>
+        <button id="btnSave">Save</button>
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+<div id="template" class="movie" hidden="true" data-id="1">
+  <div class="movie__title">Sample Title</div>
+  <div class="movie__director">Director</div>
+  <div class="movie__year">1999</div>
+</div>
+@endsection
+</html>

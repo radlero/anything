@@ -1,24 +1,39 @@
 @layout('layouts/basic')
 
 @section('content')
-    <h1>Registration Page</h1>
-    <form method="post">
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="./form.js"></script>
+    
+    <div class="wrapper">
+
+     <h1>Register For An Account</h1>
+  <p>To sign-up for a free basic account please provide us with some basic information using
+  the contact form below. Please use valid credentials.</p>
+    <form class="form" method="post">
         {{ csrfField() }}
         <input type="text" name="username" placeholder="Username" id="">
         @if(hasErrorFor('username'))
-        {{ getErrorFor('username')}}
+            <span class="error">
+                {{ getErrorFor('username')}}
+            </span>
         @endif
-            <br>
+        <br>
         <input type="text" name="email" placeholder="Email Address" id="">
-         @if(hasErrorFor('email'))
-        {{ getErrorFor('email')}}
+        @if(hasErrorFor('email'))
+            <span class="error">
+                {{ getErrorFor('email')}}
+            </span>
         @endif
         <br>
         <input type="password" name="password" placeholder="Password" id="">
-         @if(hasErrorFor('password'))
-        {{ getErrorFor('password')}}
+        @if(hasErrorFor('password'))
+            <span class = "error">
+                {{ getErrorFor('password')}}
+            </span>
         @endif
         <br>
-        <input type="submit" value="Login">
+        <input type="submit" value="Register">
     </form>
+    </div>
 @endsection

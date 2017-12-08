@@ -1,19 +1,43 @@
 <!doctype html>
 <html>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <head>
         <title>Special Offers</title>
+        <link rel="stylesheet" type="text/css" href="./style.css">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
+ 
+        
     </head>
     <body>
-        <header class="header">
-            <a href="{{ route('welcome') }}" class="logo">Special Offers</a>
-            <a href="{{ route('register')}}">Registration</a>
-            <a href="{{ route('login') }}">Login</a>
-            
-        </header>
+    <div class="wrapper">
+        
+ <input type="checkbox" id="menu" name="menu" class="menu-checkbox">
+  <div class="menu">
+    <label class="menu-toggle" for="menu"><span>Toggle</span></label>
+    <ul>
+      <li>
+        <a href="{{ route('welcome') }}" ><class type ="button">Home</a>
+      </li>
+      
+            @loggedIn 
+            <li><a href="{{ route('offers')}}">Offers</li></a>
+            <li><a href="{{ route('logout') }}">Logout</li></a>
+           
+            @else
+            <li><a href="{{ route('register') }}">Registration</li></a>
+            <li><a href="{{ route('login') }}">Login</li></a>
+            @endloggedIn
+        <li><a href="{{ route('welcome') }}">Contact</li></a>
+      
+    </ul>
+  </div>
+
+        
         @!section('content')
         <footer class="footer">
-            <span class="copyright">Copyright 2017 Arnold Clark Automobile Ltd. All rights reserved.</span>
+            <p class="copyright">Copyright 2017 Arnold Clark Automobiles Ltd. All rights reserved.</p>
         </footer>
-    
+    </div>
     </body>
 </html>

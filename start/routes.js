@@ -37,11 +37,11 @@ Route
         let username = await request.input('username')
         let email = await request.input('email')
         let password = await request.input('password')
-        console.log(username,email, password)
+        console.log(username,email, Password)
         const user = new User()
         user.username = username
         user.email = email
-        user.password = password
+        user.Password = Password
         console.log(await user.save())
 
         return await response.send("We have received your form submission")
@@ -49,12 +49,38 @@ Route
     }).validator('StoreUser')
         
 Route
-    .post('/login', async ({ request, response }) => {
-        let username = await request.input('username')
+    .post('/login', async ({ request, response, auth }) => {
+        console.log(await request.all())
+        let email = await request.input('email')
         let password = await request.input('password')
-        console.log(username, password)
-        return await response.send("Thank you for logging in")
+
+        console.log(email, password)
+
+        try {
+            await auth.attempt(email,password)
+        } catch(error) {
+            console.log(error)
+        }
+        
+        return await response.redirect('/')
       
     })
-
-    
+    Route
+    .get('/logout', async ({ request, response, auth }) => {
+        await auth.logout()
+        
+        return await response.redirect('/')
+      
+    })
+    .as('logout')
+    //*********************************************************** */
+Route.get('/offers', async ({ request, response, auth, view }) => {
+    try{
+            await auth.check()
+            console.log(await auth.check())
+            return view.render('offers')
+    }catch(error){
+        console.log(error)
+        return await response.redirect('/login')
+    }
+    }).as('offers')
